@@ -13,11 +13,21 @@ const clear = () => {
 
 const gameLoop = () => {
 	const ball = new Ball(ctx)
+	const pad1 = new Pad(ctx, canvas.width / 2 - 100, 20, 'a', 'd')
+	const pad2 = new Pad(
+		ctx,
+		canvas.width / 2 - 100,
+		canvas.height - 40,
+		'a',
+		'd'
+	)
 
 	setInterval(() => {
 		clear()
-		ball.update()
-		ball.draw()
+		;[pad1, pad2, ball].forEach((elem) => {
+			elem.update()
+			elem.draw()
+		})
 	}, 0)
 }
 
