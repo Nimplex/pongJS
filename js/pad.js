@@ -1,4 +1,4 @@
-class Ball {
+class Pad {
 	constructor(ctx, x, y, rightBind, leftBind) {
 		this.ctx = ctx
 		this.width = 60
