@@ -1,8 +1,16 @@
+const DIRECTION = {
+	UP: 0,
+	DOWN: 1,
+	LEFT: 2,
+	RIGHT: 3,
+}
+
 class Ball {
 	constructor(ctx, canvas) {
 		this.ctx = ctx
 		this.canvas = canvas
 		this.size = 20
+		this.direction = DIRECTION.UP
 		this.x = this.canvas.width / 2 - this.size / 2
 		this.y = this.canvas.height / 2 - this.size / 2
 	}
@@ -30,6 +38,9 @@ class Pad {
 				this.y = this.canvas.height - this.height * 2
 				break;
 		}
+	}
+	handleKeyboard() {
+
 	}
 	update() {
 
@@ -61,7 +72,7 @@ class Game {
 	}
 	draw() {
 		this.clear()
-		this.ctx.fillStyle = '#DAF7A6'
+		this.ctx.fillStyle = '#0f0f0f'
 		this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
 		this.ctx.fillStyle = '#FFFFFF'
 		this.ball.draw()
