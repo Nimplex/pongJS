@@ -20,7 +20,7 @@ const KEYS = {
 class Ball {
 	constructor(ctx, canvas, game) {
 		this.game = game
-		this.players = [game.player1, game.player2]
+		this.players = [game.player1, game.player2, new Wall(ctx, canvas, 'left'), new Wall(ctx, canvas, 'right')]
 		this.ctx = ctx
 		this.canvas = canvas
 		this.size = 20
@@ -30,20 +30,27 @@ class Ball {
 	}
 	update() {
 		this.players.forEach(player => {
-			console.log(player)
 			if (
 				this.x < player.x + player.width &&
 				this.x + this.size > player.x &&
 				this.y < player.y + player.height &&
 				this.y + this.size > player.y
 			) {
-
-				if (this.direction == DIRECTION.UP) return this.direction = DIRECTION.DL
-				if (this.direction == DIRECTION.DOWN) return this.direction = DIRECTION.UR
-				if (this.direction == DIRECTION.UL) return this.direction = DIRECTION.DL
-				if (this.direction == DIRECTION.UR) return this.direction = DIRECTION.DR
-				if (this.direction == DIRECTION.DR) return this.direction = DIRECTION.UR
-				if (this.direction == DIRECTION.DL) return this.direction = DIRECTION.DL
+				if (player.type == 'wall') {
+					if (this.direction == DIRECTION.UP) return this.direction = DIRECTION.DL
+					if (this.direction == DIRECTION.DOWN) return this.direction = DIRECTION.UR
+					if (this.direction == DIRECTION.UL) return this.direction = DIRECTION.UR
+					if (this.direction == DIRECTION.UR) return this.direction = DIRECTION.UL
+					if (this.direction == DIRECTION.DR) return this.direction = DIRECTION.DL
+					if (this.direction == DIRECTION.DL) return this.direction = DIRECTION.DR
+				} else {
+					if (this.direction == DIRECTION.UP) return this.direction = DIRECTION.DL
+					if (this.direction == DIRECTION.DOWN) return this.direction = DIRECTION.UR
+					if (this.direction == DIRECTION.UL) return this.direction = DIRECTION.DL
+					if (this.direction == DIRECTION.UR) return this.direction = DIRECTION.DR
+					if (this.direction == DIRECTION.DR) return this.direction = DIRECTION.UR
+					if (this.direction == DIRECTION.DL) return this.direction = DIRECTION.UL
+				}
 			}
 		})
 		if (this.direction == DIRECTION.UP) this.y -= 1
@@ -62,6 +69,7 @@ class Ball {
 
 class Pad {
 	constructor(ctx, canvas, pos) {
+		this.type = 'pad'
 		this.ctx = ctx
 		this.canvas = canvas
 		this.width = 80
@@ -104,6 +112,33 @@ class Pad {
 	}
 	draw() {
 		this.ctx.fillRect(this.x, this.y, this.width, this.height)
+	}
+}
+
+class Wall {
+	constructor(ctx, canvas, pos) {
+		this.type = 'wall'
+		this.ctx = ctx
+		this.canvas = canvas
+		this.width = 10
+		this.height = this.canvas.height
+		this.x = 0
+		this.y = 0
+
+		switch(pos) {
+			case 'left':
+				this.x = 0
+				this.y = 0
+				break;
+			case 'right':
+				this.x = this.canvas.width
+				this.y = 0
+				break;
+		}
+	}
+	update() {
+	}
+	draw() {
 	}
 }
 
