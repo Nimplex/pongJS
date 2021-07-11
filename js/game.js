@@ -33,13 +33,14 @@ class Ball {
 		this.direction = DIRECTION.DOWN
 		this.x = this.canvas.width / 2 - this.size / 2
 		this.y = this.canvas.height / 2 - this.size / 2
+		this.speed = 1.3
 	}
 	update() {
 		if (this.y <= 0 + this.size || this.y >= this.canvas.height - this.size) {
-			const { UR, UL, DR, DL } = DIRECTION
+			const { UR, UL, DR, DL, UP, DOWN } = DIRECTION
 			const dir = this.direction
-			if (dir == UR || dir == UL) this.game.gameOver('1')
-			if (dir == DR || dir == DL) this.game.gameOver('2')
+			if (dir == UR || dir == UL || dir == UP) this.game.gameOver('1')
+			if (dir == DR || dir == DL || dir == DOWN) this.game.gameOver('2')
 		}
 		this.players.forEach(player => {
 			if (
@@ -67,14 +68,14 @@ class Ball {
 				}
 			}
 		})
-		if (this.direction == DIRECTION.UP) this.y -= 1
-		if (this.direction == DIRECTION.DOWN) this.y += 1
-		if (this.direction == DIRECTION.LEFT) this.x -= 1
-		if (this.direction == DIRECTION.RIGHT) this.x += 1
-		if (this.direction == DIRECTION.UL) { this.y -= 1; this.x -= 1 }
-		if (this.direction == DIRECTION.UR) { this.y -= 1; this.x += 1 }
-		if (this.direction == DIRECTION.DL) { this.y += 1; this.x -= 1 }
-		if (this.direction == DIRECTION.DR) { this.y += 1; this.x += 1 }
+		if (this.direction == DIRECTION.UP) this.y -= this.speed
+		if (this.direction == DIRECTION.DOWN) this.y += this.speed
+		if (this.direction == DIRECTION.LEFT) this.x -= this.speed
+		if (this.direction == DIRECTION.RIGHT) this.x += this.speed
+		if (this.direction == DIRECTION.UL) { this.y -= this.speed; this.x -= this.speed }
+		if (this.direction == DIRECTION.UR) { this.y -= this.speed; this.x += this.speed }
+		if (this.direction == DIRECTION.DL) { this.y += this.speed; this.x -= this.speed }
+		if (this.direction == DIRECTION.DR) { this.y += this.speed; this.x += this.speed }
 	}
 	draw() {
 		this.game.started ? this.ctx.fillRect(this.x, this.y, this.size, this.size) : null
