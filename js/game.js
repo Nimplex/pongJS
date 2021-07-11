@@ -170,6 +170,27 @@ class Game {
 		this.ball = new Ball(this.ctx, this.canvas, this)
 		this.started = false
 
+		let time;
+		let timeout = false;
+		let delta = 200;
+
+		window.addEventListener('resize', () => {
+			time = new Date()
+			if (timeout === false) {
+				timeout = true
+				setTimeout(resizeend, delta)
+			}
+		})
+		
+		const resizeend = () => {
+			if (new Date() - time < delta) {
+				setTimeout(resizeend, delta)
+			} else {
+				timeout = false
+				location.reload()
+			}
+		}
+
 		window.addEventListener('keydown', (event) => event.code == 'KeyE' ? this.startGame() : null)
 
 		setInterval(() => { this.started ? this.update() : null; this.draw() }, 0)
