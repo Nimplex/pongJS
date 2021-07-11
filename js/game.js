@@ -17,6 +17,9 @@ const KEYS = {
 	L: 'KeyL',
 }
 
+const hitPad = new Audio('../assets/hitPad.mp3')
+const hitWall = new Audio('../assets/hitWall.mp3')
+
 class Ball {
 	constructor(ctx, canvas, game) {
 		this.game = game
@@ -37,6 +40,7 @@ class Ball {
 				this.y + this.size > player.y
 			) {
 				if (player.type == 'wall') {
+					hitWall.play()
 					if (this.direction == DIRECTION.UP) return this.direction = DIRECTION.DL
 					if (this.direction == DIRECTION.DOWN) return this.direction = DIRECTION.UR
 					if (this.direction == DIRECTION.UL) return this.direction = DIRECTION.UR
@@ -44,6 +48,7 @@ class Ball {
 					if (this.direction == DIRECTION.DR) return this.direction = DIRECTION.DL
 					if (this.direction == DIRECTION.DL) return this.direction = DIRECTION.DR
 				} else {
+					hitPad.play()
 					if (this.direction == DIRECTION.UP) return this.direction = DIRECTION.DL
 					if (this.direction == DIRECTION.DOWN) return this.direction = DIRECTION.UR
 					if (this.direction == DIRECTION.UL) return this.direction = DIRECTION.DL
@@ -153,8 +158,11 @@ class Game {
 		this.player1 = new Pad(this.ctx, this.canvas, 'up')
 		this.player2 = new Pad(this.ctx, this.canvas, 'down')
 		this.ball = new Ball(this.ctx, this.canvas, this)
+		this.started = false
 
-		setInterval(() => { this.update(); this.draw() }, 0)
+		window.addEventListener('keydown', (event) => event.code == 'KeyE' ? this.started = true : null)
+
+		setInterval(() => { this.started ? this.update() : null; this.draw() }, 0)
 	}
 	update() {
 		this.player1.update()
