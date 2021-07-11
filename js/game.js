@@ -20,6 +20,9 @@ const KEYS = {
 const hitPad = new Audio('../assets/hitPad.mp3')
 const hitWall = new Audio('../assets/hitWall.mp3')
 
+const gameStart = document.getElementById('game_start')
+const gameOver = document.getElementById('game_over')
+
 class Ball {
 	constructor(ctx, canvas, game) {
 		this.game = game
@@ -32,6 +35,12 @@ class Ball {
 		this.y = this.canvas.height / 2 - this.size / 2
 	}
 	update() {
+		if (this.y <= 0 + this.size || this.y >= this.canvas.height - this.size) {
+			const { UR, UL, DR, DL } = DIRECTION
+			const dir = this.direction
+			if (dir == UR || dir == UL) this.game.gameOver('1')
+			if (dir == DR || dir == DL) this.game.gameOver('2')
+		}
 		this.players.forEach(player => {
 			if (
 				this.x < player.x + player.width &&
@@ -68,7 +77,7 @@ class Ball {
 		if (this.direction == DIRECTION.DR) { this.y += 1; this.x += 1 }
 	}
 	draw() {
-		this.ctx.fillRect(this.x, this.y, this.size, this.size)
+		this.game.started ? this.ctx.fillRect(this.x, this.y, this.size, this.size) : null
 	}
 }
 
@@ -160,9 +169,18 @@ class Game {
 		this.ball = new Ball(this.ctx, this.canvas, this)
 		this.started = false
 
-		window.addEventListener('keydown', (event) => event.code == 'KeyE' ? this.started = true : null)
+		window.addEventListener('keydown', (event) => event.code == 'KeyE' ? this.startGame() : null)
 
 		setInterval(() => { this.started ? this.update() : null; this.draw() }, 0)
+	}
+	startGame() {
+		gameStart.style.display = 'none'
+		this.started = true
+	}
+	gameOver(player) {
+		this.started = false
+		gameOver.style.display = 'flex'
+		gameOver.innerText = `Player ${player} won the game`
 	}
 	update() {
 		this.player1.update()
