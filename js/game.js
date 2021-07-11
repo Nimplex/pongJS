@@ -24,13 +24,11 @@ class Ball {
 		this.ctx = ctx
 		this.canvas = canvas
 		this.size = 20
-		this.direction = DIRECTION.UP
+		this.direction = DIRECTION.DOWN
 		this.x = this.canvas.width / 2 - this.size / 2
 		this.y = this.canvas.height / 2 - this.size / 2
 	}
 	update() {
-		if (this.x == this.canvas.width - this.size) return this.direction == DIRECTION.UL ? DIRECTION.UR : this.direction == DIRECTION.DL ? DIRECTION.DR : DIRECTION.UR
-		if (this.x == this.size) return this.direction == DIRECTION.UL ? DIRECTION.UR : this.direction == DIRECTION.DL ? DIRECTION.DR : DIRECTION.UR
 		this.players.forEach(player => {
 			console.log(player)
 			if (
@@ -39,13 +37,13 @@ class Ball {
 				this.y < player.y + player.height &&
 				this.y + this.size > player.y
 			) {
-				if (this.direction == DIRECTION.UP) this.direction = DIRECTION.DL
-				if (this.direction == DIRECTION.DOWN) this.direction = DIRECTION.UR
-				if (this.direction == DIRECTION.UL) this.direction = DIRECTION.DL
-				if (this.direction == DIRECTION.UR) this.direction = DIRECTION.DR
-				if (this.direction == DIRECTION.DR) this.direction = DIRECTION.UR
-				if (this.direction == DIRECTION.DL) this.direction = DIRECTION.DL
-				return
+
+				if (this.direction == DIRECTION.UP) return this.direction = DIRECTION.DL
+				if (this.direction == DIRECTION.DOWN) return this.direction = DIRECTION.UR
+				if (this.direction == DIRECTION.UL) return this.direction = DIRECTION.DL
+				if (this.direction == DIRECTION.UR) return this.direction = DIRECTION.DR
+				if (this.direction == DIRECTION.DR) return this.direction = DIRECTION.UR
+				if (this.direction == DIRECTION.DL) return this.direction = DIRECTION.DL
 			}
 		})
 		if (this.direction == DIRECTION.UP) this.y -= 1
